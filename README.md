@@ -17,5 +17,6 @@
   - Mobile
     - Utilizando:
       - React Native
+      - Expo
     
 - Para conectar jogadores em busca do seu duo!
