@@ -1,31 +1,29 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
-    "version": "1.0.0",
-    "orientation": "portrait",
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#FFFFFF",
+        "foregroundImage": "./assets/adaptive-icon.png"
+      }
+    },
+    "assetBundlePatterns": ["**/*"],
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true
+    },
+    "name": "mobile",
+    "orientation": "portrait",
+    "slug": "mobile",
     "splash": {
+      "backgroundColor": "#121214",
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "contain"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
-    },
+    "userInterfaceStyle": "light",
+    "version": "1.0.0",
     "web": {
       "favicon": "./assets/favicon.png"
     }
