@@ -10,8 +10,8 @@ import {
   Inter_700Bold,
   Inter_800ExtraBold,
 } from "@expo-google-fonts/inter";
-import { Home } from "./src/pages/Home";
 import { Loading } from "./src/components/Loading";
+import { Routes } from "./src/routes";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -27,14 +27,5 @@ export default function App() {
     return null;
   }
 
-  return (
-    <Background>
-      <StatusBar
-        barStyle="light-content"
-        translucent
-        backgroundColor="transparent"
-      />
-      {fontsLoaded ? <Home /> : <Loading />}
-    </Background>
-  );
+  return <Background>{fontsLoaded ? <Routes /> : <Loading />}</Background>;
 }
