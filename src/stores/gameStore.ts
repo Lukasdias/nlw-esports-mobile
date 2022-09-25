@@ -9,19 +9,30 @@ type GameStore = {
   loadingCurrentAds: boolean;
   cleanCurrentAds: () => void;
   currentDiscord: string;
+  loadingCurrentDiscord: boolean;
   cleanCurrentDiscord: () => void;
   fetchGames: () => void;
   fetchDiscord: (adId: string) => void;
   fetchAdsByGame: (gameId: string) => void;
+  errorOnFetchGames: boolean;
+  errorOnFetchAdsByGame: boolean;
+  errorOnFetchDiscord: boolean;
+  cleanGames: () => void;
+  cleanAdsByGame: () => void;
+  cleanDiscord: () => void;
 };
 
 export const useGameStore = create<GameStore>((set, get) => ({
   games: [],
   loadingGames: true,
   currentAds: [],
-  loadingCurrentAds: false,
-  cleanCurrentAds: () => set({ currentAds: [] }),
+  loadingCurrentAds: true,
+  loadingCurrentDiscord: true,
   currentDiscord: "",
+  errorOnFetchGames: false,
+  errorOnFetchAdsByGame: false,
+  errorOnFetchDiscord: false,
+  cleanCurrentAds: () => set({ currentAds: [] }),
   cleanCurrentDiscord: () => set({ currentDiscord: "" }),
   fetchGames: async () => {
     set({ loadingGames: true });
@@ -29,22 +40,48 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set({
         games: (await api.getGames()) ?? ([] as Game[]),
       });
-      console.log("games", JSON.stringify(get().games, null, 2));
     } catch (error) {
-      console.log(error);
-      set({ loadingGames: false });
+      set({ loadingGames: false, errorOnFetchGames: true });
     } finally {
       set({ loadingGames: false });
     }
   },
   fetchDiscord: async (adId: string) => {
-    set({
-      currentDiscord: (await api.getDiscord({ adId })) ?? "",
-    });
+    try {
+      set({ loadingCurrentDiscord: true });
+      set({
+        currentDiscord: (await api.getDiscord({ adId })) ?? "",
+      });
+    } catch (error) {
+      set({ loadingCurrentDiscord: false, errorOnFetchDiscord: true });
+    } finally {
+      set({ loadingCurrentDiscord: false });
+    }
   },
   fetchAdsByGame: async (gameId: string) => {
-    set({
-      currentAds: (await api.getAdsByGame({ gameId })) ?? ([] as Ad[]),
-    });
+    try {
+      set({ loadingCurrentAds: true });
+      set({
+        currentAds: (await api.getAdsByGame({ gameId })) ?? ([] as Ad[]),
+      });
+    } catch (error) {
+      set({ loadingCurrentAds: false, errorOnFetchAdsByGame: true });
+    } finally {
+      set({ loadingCurrentAds: false });
+    }
   },
+  cleanGames: () =>
+    set({ games: [], errorOnFetchGames: false, loadingGames: false }),
+  cleanAdsByGame: () =>
+    set({
+      currentAds: [],
+      errorOnFetchAdsByGame: false,
+      loadingCurrentAds: true,
+    }),
+  cleanDiscord: () =>
+    set({
+      currentDiscord: "",
+      errorOnFetchDiscord: false,
+      loadingCurrentDiscord: true,
+    }),
 }));

@@ -13,6 +13,7 @@
     },
     "name": "mobile",
     "orientation": "portrait",
+    "plugins": ["expo-community-flipper"],
     "slug": "mobile",
     "splash": {
       "backgroundColor": "#121214",

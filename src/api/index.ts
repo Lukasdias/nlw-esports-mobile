@@ -19,13 +19,13 @@ export async function getGames() {
 }
 
 export async function getDiscord(params: GetDiscordRequest) {
-  return (await axios.get(`${IP}:3333/ads/${params.adId}/discord`))
-    .data as string;
+  const res = await axios.get(`${IP}:3333/ads/${params.adId}/discord`);
+  return res.data.discord as string;
 }
 
 export async function getAdsByGame(params: GetAdsByGameRequest) {
-  return (await axios.get(`${IP}:3333/games/${params.gameId}/ads`))
-    .data as Ad[];
+  const res = await axios.get(`${IP}:3333/games/${params.gameId}/ads`);
+  return res.data as Ad[];
 }
 
 export async function addAdToGame(params: AddAdToGameRequest) {

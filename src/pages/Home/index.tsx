@@ -20,8 +20,11 @@ import { useGameStore } from "../../stores/gameStore";
 import { Loading } from "../../components/Loading";
 import { THEME } from "../../theme";
 import { Game } from "../../api/types";
+import { useNavigation } from "@react-navigation/native";
+import { Skeleton } from "moti/skeleton";
+import { HomeSkeleton } from "./skeleton";
 
-export function Home({ navigation }) {
+export function Home() {
   const {
     games,
     loadingGames,
@@ -32,41 +35,50 @@ export function Home({ navigation }) {
     fetchDiscord,
   } = useGameStore();
 
+  const navigation = useNavigation();
+
   useEffect(() => {
     fetchGames();
   }, []);
 
   const renderItem = ({ item }: { item: Game }) => {
     return (
-      <>
-        {loadingGames ? (
-          <View
-            style={{
-              width: 320,
-              height: 320,
-              backgroundColor: THEME.COLORS.CAPTION_300,
-              borderRadius: 8,
-              marginRight: 8,
-            }}
-          >
-            <Loading />
-          </View>
-        ) : (
-          <GameCard
-            data={{
-              id: item.id,
-              name: item.name,
-              cover: item.bannerUrl,
-              ads: item?.ads?.toString() ?? "0",
-            }}
-            onPress={() => navigation.navigate("GameAds", { game: item })}
-          />
-        )}
-      </>
+      <GameCard
+        data={{
+          id: item.id,
+          name: item.name,
+          cover: item.bannerUrl,
+          ads: item?.ads?.toString() ?? "0",
+        }}
+        onPress={() => navigation.navigate("GameAds", { game: item })}
+      />
     );
   };
 
   const keyExtractor = (item: Game) => item.id;
+
+  const EmptyList = () => {
+    return loadingGames ? (
+      <HomeSkeleton />
+    ) : (
+      <View
+        style={{
+          flex: 1,
+        }}
+      >
+        <Text
+          style={{
+            color: "#fff",
+            fontSize: 24,
+            textAlign: "center",
+            marginTop: 16,
+          }}
+        >
+          Nenhum jogo encontrado
+        </Text>
+      </View>
+    );
+  };
 
   return (
     <Background>
@@ -83,6 +95,7 @@ export function Home({ navigation }) {
           data={games}
           keyExtractor={keyExtractor}
           renderItem={renderItem}
+          ListEmptyComponent={EmptyList}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.contentList}
           horizontal
